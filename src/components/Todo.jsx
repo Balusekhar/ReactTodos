@@ -16,12 +16,9 @@ function Todo() {
     }
   }
 
-  function editTodo(index) {
-    const newTodo = prompt("Edit your todo:", todos[index]);
-    if (newTodo !== null && newTodo.trim() !== "") {
-      const updatedTodos = todos.map((todo, i) => (i === index ? newTodo : todo));
-      setTodos(updatedTodos);
-    }
+  function updateTodo(index, newText) {
+    const updatedTodos = todos.map((todo, i) => (i === index ? newText : todo));
+    setTodos(updatedTodos);
   }
 
   function deleteTodo(index) {
@@ -54,7 +51,7 @@ function Todo() {
         <h3 className="text-center text-xl font-bold mt-8 mb-5">MY TODOS</h3>
         <TodoContainer
           todos={todos}
-          editTodo={editTodo}
+          updateTodo={updateTodo}
           deleteTodo={deleteTodo}
         />
       </div>

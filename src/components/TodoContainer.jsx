@@ -1,8 +1,20 @@
-import React from "react";
-import { FaEdit, FaTrash } from "react-icons/fa";
+// Import useState to manage local state
+import React, { useState } from "react";
+import { FaEdit, FaTrash, FaSave } from "react-icons/fa";
 
-function TodoContainer({ todos, editTodo, deleteTodo,editState }) {
+function TodoContainer({ todos, updateTodo, deleteTodo }) {
+  const [editingIndex, setEditingIndex] = useState(null); // Track which todo is being edited
+  const [editText, setEditText] = useState(""); // Track the new text for the todo being edited
 
+  const handleEditClick = (index, currentText) => {
+    setEditingIndex(index);
+    setEditText(currentText); // Set the current text to the input field
+  };
+
+  const handleSaveClick = (index) => {
+    updateTodo(index, editText); // Update the todo with the new text
+    setEditingIndex(null); // Exit the edit mode
+  };
 
   return (
     <div className="w-[98%] min-w-[400px] bg-white rounded-md p-6 shadow-lg mt-6">
@@ -13,14 +25,32 @@ function TodoContainer({ todos, editTodo, deleteTodo,editState }) {
               key={index}
               className="flex items-center justify-between bg-gray-100 p-4 rounded-md shadow"
             >
-              <span>{todo}</span>
+              {editingIndex === index ? (
+                <input
+                  type="text"
+                  value={editText}
+                  onChange={(e) => setEditText(e.target.value)}
+                  className="flex-grow p-2 me-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+              ) : (
+                <span>{todo}</span>
+              )}
               <div className="flex space-x-2">
-                <button
-                  onClick={() => editTodo(index)}
-                  className="text-blue-500 hover:text-blue-600"
-                >
-                  <FaEdit size={20} />
-                </button>
+                {editingIndex === index ? (
+                  <button
+                    onClick={() => handleSaveClick(index)}
+                    className="text-green-500 hover:text-green-600"
+                  >
+                    <FaSave size={20} />
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => handleEditClick(index, todo)}
+                    className="text-blue-500 hover:text-blue-600"
+                  >
+                    <FaEdit size={20} />
+                  </button>
+                )}
                 <button
                   onClick={() => deleteTodo(index)}
                   className="text-red-500 hover:text-red-600"
